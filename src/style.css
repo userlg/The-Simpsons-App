@@ -1,0 +1,32 @@
+@import "tailwindcss" source(none);
+@source "./index.html";
+@source "./src/**/*.{vue,js,ts,jsx,tsx}";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-simpson-yellow: #ffd90f;
+  --color-simpson-blue: #0c6cbf;
+  --color-simpson-pink: #d14294;
+  --color-simpson-text: #333333;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-zinc-900 transition-colors duration-300;
+  }
+  .dark body {
+    @apply bg-zinc-900 text-zinc-100;
+  }
+}
+
+/* Global transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
