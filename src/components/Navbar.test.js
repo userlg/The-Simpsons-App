@@ -61,7 +61,7 @@ describe("Navbar Component", () => {
     // Let's assume the mobile menu contains the same links.
 
     // Since we are stubbing RouterLink, we can search for RouterLinkStub components
-    const links = wrapper.findAllComponents(RouterLinkStub);
+    wrapper.findAllComponents(RouterLinkStub);
     // Desktop: 5 links (1 logo + 4 menu)
     // Mobile: 4 links
     // Total should be 9 if both rendered, but desktop hidden via css.

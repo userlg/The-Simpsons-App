@@ -5,6 +5,7 @@ defineOptions({
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import ThemeToggle from "./ThemeToggle.vue";
+import AudioPlayer from "./AudioPlayer.vue";
 
 const isMenuOpen = ref(false);
 
@@ -61,11 +62,15 @@ const toggleMenu = () => {
           <div class="flex items-center ml-2">
             <ThemeToggle />
           </div>
+          <div class="flex items-center ml-2">
+            <AudioPlayer />
+          </div>
         </div>
 
         <!-- Mobile Menu Button -->
-        <div class="md:hidden flex items-center">
-          <ThemeToggle class="mr-2" />
+        <div class="md:hidden flex items-center gap-2">
+          <AudioPlayer />
+          <ThemeToggle />
           <button
             @click="toggleMenu"
             class="text-zinc-700 dark:text-zinc-300 hover:text-simpson-yellow focus:outline-none"
