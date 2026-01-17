@@ -46,4 +46,23 @@ describe("ThemeToggle Component", () => {
     expect(document.documentElement.classList.contains("dark")).toBe(false);
     expect(localStorage.getItem("theme")).toBe("light");
   });
+
+  it("initializes with light theme when no preference set", () => {
+    // No theme in localStorage and matchMedia returns false (already set in beforeEach)
+    const wrapper = mount(ThemeToggle);
+
+    // Should be in light mode
+    expect(wrapper.vm.isDark).toBe(false);
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+  });
+
+  it("initializes with dark theme from localStorage", () => {
+    localStorage.setItem("theme", "dark");
+
+    const wrapper = mount(ThemeToggle);
+
+    // Should be in dark mode
+    expect(wrapper.vm.isDark).toBe(true);
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+  });
 });

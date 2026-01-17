@@ -25,11 +25,11 @@ describe("Locations View", () => {
 
     const wrapper = mount(Locations, {
       global: {
-        stubs: { Card: true },
+        stubs: { Card: true, SkeletonCard: true, ErrorState: true },
       },
     });
 
-    expect(wrapper.find(".animate-spin").exists()).toBe(true);
+    expect(wrapper.findAll("skeleton-card-stub").length).toBeGreaterThan(0);
   });
 
   it("renders locations on success", async () => {
@@ -47,13 +47,13 @@ describe("Locations View", () => {
 
     const wrapper = mount(Locations, {
       global: {
-        stubs: { Card: true },
+        stubs: { Card: true, SkeletonCard: true, ErrorState: true },
       },
     });
 
     await flushPromises();
 
-    expect(wrapper.find(".animate-spin").exists()).toBe(false);
+    expect(wrapper.findAll("skeleton-card-stub").length).toBe(0);
     expect(api.getLocations).toHaveBeenCalledTimes(1);
     expect(wrapper.findAll("card-stub").length).toBe(2);
   });
@@ -63,12 +63,60 @@ describe("Locations View", () => {
 
     const wrapper = mount(Locations, {
       global: {
-        stubs: { Card: true },
+        stubs: { Card: true, SkeletonCard: true, ErrorState: true },
       },
     });
 
     await flushPromises();
 
-    expect(wrapper.text()).toContain("Failed to load locations");
+    expect(wrapper.find("error-state-stub").exists()).toBe(true);
+  });
+
+  it("handles search filtering", async () => {
+    const mockLocations = [
+      { id: 1, name: "Moe's Tavern", town: "Springfield" },
+      { id: 2, name: "Kwik-E-Mart", town: "Springfield" },
+      { id: 3, name: "Nuclear Power Plant", town: "Springfield" },
+    ];
+
+    api.getLocations.mockResolvedValue({ data: mockLocations });
+
+    const wrapper = mount(Locations, {
+      global: {
+        stubs: { Card: true, SkeletonCard: true, ErrorState: true },
+      },
+    });
+
+    await flushPromises();
+
+    // Search for "Nuclear"
+    const searchInput = wrapper.find('input[type="text"]');
+    await searchInput.setValue("Nuclear");
+
+    // Should show search count
+    expect(wrapper.text()).toContain("Found 1 location");
+  });
+
+  it("handles pagination - load more", async () => {
+    const page1Data = Array(10)
+      .fill(null)
+      .map((_, i) => ({
+        id: i + 1,
+        name: `Location ${i + 1}`,
+        town: "Springfield",
+      }));
+
+    api.getLocations.mockResolvedValueOnce({ data: page1Data });
+
+    const wrapper = mount(Locations, {
+      global: {
+        stubs: { Card: true, SkeletonCard: true, ErrorState: true },
+      },
+    });
+
+    await flushPromises();
+
+    // Should have 10 locations
+    expect(wrapper.findAll("card-stub").length).toBe(10);
   });
 });
