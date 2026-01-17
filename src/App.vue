@@ -7,7 +7,11 @@ import { RouterView } from "vue-router";
   <div class="bg-white dark:bg-zinc-900 min-h-screen">
     <Navbar />
     <main>
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <Transition name="page" mode="out-in">
+          <component :is="Component" />
+        </Transition>
+      </RouterView>
     </main>
   </div>
 </template>
